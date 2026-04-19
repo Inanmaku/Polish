@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Language Trainer</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
+</head>
+<body>
+
+
+<div id="menu" class="screen">
+    <img src="assets/POLISH.png" alt="Polish" class="title-img">
+
+    <div class="btn-wrapper verbs">
+        <button class="btn" onclick="startSingle('verbs')">verbs</button>
+        <div class="shadow"></div>
+    </div>
+
+    <div class="btn-wrapper adjectives">
+        <button class="btn" onclick="startSingle('adjectives')">Adjectives</button>
+        <div class="shadow"></div>
+    </div>
+
+    <div class="btn-wrapper">
+        <button class="btn" onclick="startSingle('subjects')">subjects</button>
+        <div class="shadow"></div>
+    </div>
+
+    <div class="btn-wrapper">
+        <button class="btn" onclick="startSingle('sentences')">sentences</button>
+        <div class="shadow"></div>
+    </div>
+
+    <div class="btn-wrapper">
+        <button class="btn" onclick="startSingle('connectors')">connectors</button>
+        <div class="shadow"></div>
+    </div>
+</div>
+
+
+
+<div id="quiz" class="screen" style="display:none;">
+    <div class="top-bar">
+    <div class="left-controls">
+        <div class="back-btn-wrapper" onclick="goMenu()">
+            <img src="assets/back.png" class="back-btn">
+            <img src="assets/buttomback.png" class="back-shadow">
+        </div>
+    </div>
+
+    <img id="quizTitle" class="quiz-title" src="">
+
+    <div class="right-controls">
+        <div class="shuffle-btn-wrapper" onclick="shuffleQuestions()">
+            <img src="assets/re.png" class="shuffle-btn">
+            <img src="assets/buttomre.png" class="shuffle-shadow">
+        </div>
+
+        <div class="again-btn-wrapper" onclick="restartSection()">
+            <img src="assets/again.png" class="again-btn">
+            <img src="assets/buttomagain.png" class="again-shadow">
+        </div>
+    </div>
+</div>
+<div class="box-container"id="box">
+    <img src="assets/boxboxbox.png" class="box-container">
+
+    <!-- 🌸 TOP LEFT -->
+    <img src="assets/darkredflower.png" class="flower tl1 f1">
+    <img src="assets/redflower.png" class="flower tl2 f2">
+    <img src="assets/greyflower.png" class="flower tl3 f3">
+
+    <!-- 🌸 TOP RIGHT -->
+
+    <img src="assets/redflower.png" class="flower tr2 f2">
+    <img src="assets/darkredflower.png" class="flower tr3 f3">
+        <img src="assets/greyflower.png" class="flower tr4 f4">
+
+    <!-- 🌸 BOTTOM LEFT -->
+    <img src="assets/redflower.png" class="flower bl1 f1">
+    <img src="assets/darkredflower.png" class="flower bl2 f2">
+    <img src="assets/greyflower.png" class="flower bl3 f3">
+
+    <!-- 🌸 BOTTOM RIGHT -->
+    <img src="assets/greyflower.png" class="flower br1 f1">
+    <img src="assets/redflower.png" class="flower br2 f2">
+    <img src="assets/darkredflower.png" class="flower br3 f3">
+
+    <!-- CONTENT -->
+    <h2 id="question" class="question-text"></h2>
+    <input id="answer" class="answer-input" autofocus>
+    <p id="result" class="result-text"></p>
+</div>
+
+   
+
+
+
+ <div id="progressBar">
+  <div id="progress"></div>
+<div class="progress-flowers"></div>
+
+    <img src="assets/bison.png" id="bison">
+</div>
+</div>
+</div>
+
+<script>
+let database = {};
+let questions = [];
+let activeBatch = [];
+let finishedQuestions = [];
+let remainingQuestions = [];
+let history = [];
+let current = null;
+let totalQuestions = 0;
+let wrongMode = false;
+let swapped = false;
+let batchSize = 15;
+let repeatSameQuestion = false;
+let lastFlowerPercent = -1;
+
+// Load JSON words
+fetch("words.json")
+  .then(response => response.json())
+  .then(data => {
+    database = data;
+  });
+
+// Normalize Polish letters
+function normalize(text) {
+    return text.toLowerCase()
+        .replace(/ą/g,"a").replace(/ć/g,"c").replace(/ę/g,"e")
+        .replace(/ł/g,"l").replace(/ń/g,"n").replace(/ó/g,"o")
+        .replace(/ś/g,"s").replace(/ź/g,"z").replace(/ż/g,"z");
+}
+
+// Levenshtein distance
+function levenshtein(a, b) {
+    let matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i-1) === a.charAt(j-1)) {
+                matrix[i][j] = matrix[i-1][j-1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i-1][j-1]+1,
+                    matrix[i][j-1]+1,
+                    matrix[i-1][j]+1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+// Shuffle
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+function goMenu() {
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("menu").style.display = "flex";
+    document.getElementById("mixMenu").style.display = "none";
+
+    // Optional: reset everything
+    questions = [];
+    activeBatch = [];
+    finishedQuestions = [];
+    remainingQuestions = [];
+    history = [];
+    current = null;
+}
+
+// Start level
+function startSingle(level) {
+    questions = JSON.parse(JSON.stringify(database[level]));
+    initQuiz();
+}
+function dropFlowerAtPosition(percent) {
+    const container = document.querySelector(".progress-flowers");
+
+    const flowers = [
+        "assets/redflower.png",
+        "assets/darkredflower.png",
+        "assets/greyflower.png"
+    ];
+
+    let img = document.createElement("img");
+
+    img.src = flowers[Math.floor(Math.random() * flowers.length)];
+    img.className = "progress-flower";
+
+    // position
+    img.style.left = percent + "%";
+    img.style.top = (47 + Math.random() * 6) + "%";
+
+    // size
+    let size = 10 + Math.random() * 15;
+    img.style.width = size + "px";
+
+    // rotation (IMPORTANT: CSS uses this)
+    let rotation = Math.random() * 360;
+    img.style.setProperty("--rot", rotation + "deg");
+
+    // IMPORTANT: DO NOT set full transform here
+    img.style.transform = "translate(-50%, -50%)";
+
+    container.appendChild(img);
+}
+// Initialize quiz
+function initQuiz() {
+    finishedQuestions = [];
+    history = [];
+    remainingQuestions = shuffle([...questions]);
+    activeBatch = remainingQuestions.splice(0, batchSize);
+
+    activeBatch.forEach(q => {
+        q.streak = 0;
+        q.repeatCorrected = false;
+        q.hadWrong = false;
+        q.id = q.id || Math.random();
+    });
+
+    totalQuestions = questions.length;
+
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+
+    nextQuestion();
+}
+function startSingle(level) {
+    questions = JSON.parse(JSON.stringify(database[level]));
+
+    // 👇 set title image
+    document.getElementById("quizTitle").src = "assets/" + level + ".png";
+
+    initQuiz();
+}
+// Next question
+function nextQuestion() {
+    if (activeBatch.length === 0) {
+        showFinished();
+        return;
+    }
+
+    if (!repeatSameQuestion) {
+        let available = activeBatch.filter(q => !history.includes(q));
+        if (available.length === 0) available = activeBatch;
+        current = available[Math.floor(Math.random() * available.length)];
+
+        history.push(current);
+        if (history.length > 6) history.shift();
+    }
+
+    repeatSameQuestion = false;
+
+    document.getElementById("question").innerText = swapped ? current.a : current.q;
+    document.getElementById("answer").value = "";
+    document.getElementById("result").innerText = "";
+    wrongMode = false;
+    updateProgress();
+}
+
+// Enter key
+document.getElementById("answer").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+
+        if (wrongMode) {
+            wrongMode = false;
+            document.getElementById("result").innerText = "";
+            document.getElementById("answer").value = "";
+            return;
+        }
+
+        checkAnswer();
+    }
+});
+
+// Check answer
+function checkAnswer() {
+    let user = normalize(document.getElementById("answer").value);
+    let correctRaw = swapped ? current.q : current.a;
+    let correct = normalize(correctRaw);
+
+    if (isCorrect(user, correct)) {
+
+        // CASE A: never wrong → instant finish
+        if (!current.hadWrong) {
+            animateBox("final");
+
+            setTimeout(() => {
+                removeFromBatch(current);
+                nextQuestion();
+            }, 200);
+
+            return;
+        }
+
+        // CASE B: had wrong → build streak
+        current.correctCount = (current.correctCount || 0) + 1;
+
+        animateBox("soft");
+
+        setTimeout(() => {
+            if (current.correctCount >= 3) {
+                animateBox("final");
+                removeFromBatch(current);
+                current.correctCount = 0;
+                current.hadWrong = false;
+            }
+
+            nextQuestion();
+        }, 200);
+
+    } else {
+
+        current.hadWrong = true;
+        current.correctCount = 0;
+
+        animateBox("wrong");
+        document.getElementById("result").innerText = "Wrong: " + correctRaw;
+
+        wrongMode = true;
+    }
+}
+function isCorrect(user, correct) {
+    return user === correct;
+}
+// Remove finished question
+function removeFromBatch(q) {
+    activeBatch = activeBatch.filter(x => x.id !== q.id);
+    finishedQuestions.push(q);
+
+    if (remainingQuestions.length > 0) {
+        let nextQ = remainingQuestions.shift();
+        nextQ.streak = 0;
+        nextQ.repeatCorrected = false;
+        nextQ.id = nextQ.id || Math.random();
+        activeBatch.push(nextQ);
+    }
+}
+
+// Finished
+function showFinished() {
+    document.getElementById("question").innerText = "Finished!";
+    document.getElementById("progress").style.width = "100%";
+}
+
+// Progress bar
+function updateProgress() {
+    let done = finishedQuestions.length;
+    let percent = (done / totalQuestions) * 100;
+
+    document.getElementById("progress").style.width = percent + "%";
+    document.getElementById("bison").style.left = percent + "%";
+
+    // ✅ ONLY drop flower if progress increased
+   if (percent > lastFlowerPercent) {
+
+    // 🎲 only spawn sometimes (about 1 in 3)
+    if (Math.random() < 0.35) {
+        dropFlowerAtPosition(percent);
+    }
+
+    lastFlowerPercent = percent;
+}
+}
+
+// Swap Q/A
+function swapQA() {
+    swapped = !swapped;
+    if (current) {
+        document.getElementById("question").innerText = swapped ? current.a : current.q;
+        document.getElementById("answer").value = "";
+        document.getElementById("result").innerText = "";
+    }
+}
+function animateBox(type) {
+    const box = document.getElementById("box");
+
+    box.classList.remove("box-wrong", "box-correct", "box-correct-soft", "box-correct-final");
+
+    void box.offsetWidth;
+
+    if (type === "wrong") {
+        box.classList.add("box-wrong");
+
+    } else if (type === "soft") {
+        box.classList.add("box-correct-soft");
+
+    } else if (type === "final") {
+        box.classList.add("box-correct-final");
+    }
+}
+// Restart section
+function restartSection() {
+    // 🌸 remove all flowers
+    document.querySelector(".progress-flowers").innerHTML = "";
+
+    // 🔁 reset tracking
+    lastFlowerPercent = -1;
+
+    initQuiz();
+}
+</script>
+
+</body>
+</html>
