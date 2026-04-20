@@ -53,7 +53,7 @@
     <img id="quizTitle" class="quiz-title" src="">
 
     <div class="right-controls">
-        <div class="shuffle-btn-wrapper" onclick="shuffleQuestions()">
+        <div class="shuffle-btn-wrapper" onclick="swapQA()">
             <img src="assets/re.png" class="shuffle-btn">
             <img src="assets/buttomre.png" class="shuffle-shadow">
         </div>
@@ -265,6 +265,10 @@ function nextQuestion() {
     document.getElementById("result").innerText = "";
     wrongMode = false;
     updateProgress();
+    // reset flower animations
+document.querySelectorAll(".flower").forEach(f => {
+    f.classList.remove("flower-tap");
+});
 }
 
 // Enter key
@@ -361,13 +365,10 @@ function updateProgress() {
     document.getElementById("bison").style.left = percent + "%";
 
     // ✅ ONLY drop flower if progress increased
-   if (percent > lastFlowerPercent) {
-
-    // 🎲 only spawn sometimes (about 1 in 3)
-    if (Math.random() < 0.35) {
+if (percent > lastFlowerPercent + 5) { // every 5%
+    if (Math.random() < 0.3) {
         dropFlowerAtPosition(percent);
     }
-
     lastFlowerPercent = percent;
 }
 }
@@ -407,7 +408,20 @@ function restartSection() {
     lastFlowerPercent = -1;
 
     initQuiz();
+    document.querySelectorAll(".flower").forEach(f => {
+    f.classList.remove("flower-tap");
+});
 }
+// 🌸 Flower tap animation (box flowers)
+document.querySelectorAll(".flower").forEach(flower => {
+    flower.addEventListener("click", () => {
+        flower.classList.add("flower-tap");
+
+        setTimeout(() => {
+            flower.classList.remove("flower-tap");
+        }, 250);
+    });
+});
 </script>
 
 </body></div>

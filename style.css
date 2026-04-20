@@ -28,6 +28,42 @@ overscroll-behavior: none;
     overflow: hidden;
 }
 @media (max-width: 600px) {
+      #quiz .quiz-title {
+        position: absolute;
+    left: 7px !important;
+        height: auto;
+        width: 220px;
+    }
+   .back-btn-wrapper,
+    .shuffle-btn-wrapper
+     {
+        width: 50px;
+        height: 50px;
+    }
+    .top-bar {
+        position: absolute;
+        top: 5px;
+        left: 0;
+        width: 100%;
+
+        display: flex;
+        justify-content: space-between;
+       
+
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+     .again-btn-wrapper {
+        display: none;
+    }
+   .back-btn-wrapper {
+    position: absolute;
+    left: -170px !important;
+}
+     .shuffle-btn-wrapper {
+    position: absolute;
+    right: -130px !important;
+}
     #progressBar {
         bottom: auto;              /* ❌ stop using bottom */
         top: calc(48% + 170px); /* 👈 place under box */
@@ -37,29 +73,46 @@ overscroll-behavior: none;
         width: 80vw !important;
         max-width: none !important; 
         overflow: visible;/* 👈 position under box */
-      padding: 0 10px;
+     
         box-sizing: border-box;
     }
+   
     .box-container {
-    width: 370px !important;
+    width: 350px !important;
     
 }
+  .back-btn-wrapper,
+    .shuffle-btn-wrapper {
+        position: static;   /* 👈 THIS is the key fix */
+    }
     .btn-wrapper {
-        transform: scale(1.4);
+        transform: scale(1.0);
+        transform: translateY(-45px);
     }
      .title-img {
-        margin-bottom: 28px;   /* more space below title */
-        transform: translateY(-10px); /* moves it UP */
+        margin-bottom: 8px;   /* more space below title */
+        transform: translateY(-60px); /* moves it UP */
     }
      #menu {
-        gap: 40px; /* adds spacing between items */
+        gap: 2px; /* adds spacing between items */
         transform: translateY(90px); /* pushes whole button group DOWN */
     }
+.flower:hover {
+        transform: none;
+    }
+    .flower-tap {
+    transform: scale(1.5) rotate(10deg);
+}
+.flower {
+    transition: transform 0.25s ease;
+}
+
+   
     body {
           background: linear-gradient(
             to bottom,
-            #fffdf7 50%,  /* 👈 was 50%, now higher */
-            #e15446 50%        );
+            #fffdf7 45%,  /* 👈 was 50%, now higher */
+            #e15446 45%        );
         transform-origin: top center;
         overflow-x: hidden;
     }
@@ -351,6 +404,7 @@ overscroll-behavior: none;
     font-size: 28px;
     font-weight: 600;
      color: rgb(255, 255, 255);
+     z-index: 1000;
 }
 
 /* INPUT (center) */
