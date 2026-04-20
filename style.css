@@ -4,6 +4,8 @@ html, body {
     min-height: 100vh;
      height: 100%;
     overflow: hidden;
+    overflow-x: hidden;
+    touch-action: manipulation;
     
 overscroll-behavior: none;
  
@@ -13,6 +15,73 @@ overscroll-behavior: none;
         #fffdf7 50%,
         #e15446 50%
     );
+}
+
+#app {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+@media (max-width: 600px) {
+    #progressBar {
+        bottom: auto;              /* ❌ stop using bottom */
+        top: calc(48% + 170px); /* 👈 place under box */
+       
+        left: 50%;
+        transform: translateX(-50%); 
+        width: 80vw !important;
+        max-width: none !important; 
+        overflow: visible;/* 👈 position under box */
+      padding: 0 10px;
+        box-sizing: border-box;
+    }
+    .box-container {
+    width: 370px !important;
+    
+}
+    .btn-wrapper {
+        transform: scale(1.4);
+    }
+     .title-img {
+        margin-bottom: 28px;   /* more space below title */
+        transform: translateY(-10px); /* moves it UP */
+    }
+     #menu {
+        gap: 40px; /* adds spacing between items */
+        transform: translateY(90px); /* pushes whole button group DOWN */
+    }
+    body {
+          background: linear-gradient(
+            to bottom,
+            #fffdf7 50%,  /* 👈 was 50%, now higher */
+            #e15446 50%        );
+        transform-origin: top center;
+        overflow-x: hidden;
+    }
+
+    #bison {
+     position: absolute;
+    top: -12px;
+
+    left: 60px;          /* 👈 small safe offset */
+    transform: none;    /* was -17px, too aggressive */
+}
+    #quiz,
+.box-container {
+    overflow: visible;
+}
+}
+.title-img {
+    width: 330px;
+}
+.title-img {
+    width: 85vw;   /* fills phone width nicely */
+    max-width: 330px; /* keeps desktop same */
 }
 .screen {
     display: flex;
@@ -253,8 +322,11 @@ overscroll-behavior: none;
     left: 50%;
     transform: translate(-50%, -50%);
     
-    width: 450px;   /* 👈 slightly bigger looks better */
-    height: 290px;
+    width: 90vw;
+    max-width: 450px;
+
+    height: auto;
+    aspect-ratio: 450 / 290;
 }
 
 /* IMAGE = background */
