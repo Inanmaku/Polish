@@ -21,9 +21,19 @@ overscroll-behavior: none;
 #app {
     width: 100%;
     min-height: 100dvh;
+    align-items: center;
+}
+    
+.back-btn-wrapper {
+    left: 10px !important;
+}
+
+.shuffle-btn-wrapper {
+    right: 10px !important;
+};
 
    
-}
+
 @media (max-width: 600px) {
      #app {
         display: block;
@@ -66,10 +76,12 @@ overscroll-behavior: none;
     }
 .back-btn-wrapper {
     left: 15px !important;
+    z-index: 10;
 }
 
 .shuffle-btn-wrapper {
     right: 15px !important;
+    z-index: 10;
 }
     #progressBar {
         bottom: auto;
@@ -128,6 +140,7 @@ overscroll-behavior: none;
 
 .title-img {
     width: 330px;
+    z-index: 9;
 }
 .title-img {
     width: 85vw;   /* fills phone width nicely */
