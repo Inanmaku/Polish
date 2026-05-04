@@ -380,7 +380,7 @@
   {"q": "general", "a": "ogólny"}
 ],
   "links": [
-  {"q": "the", "a": "ten/ta/to"},
+  {"q": "the", "a": ["ten", "ta", "to"]},
   {"q": "a", "a": "jakiś"},
   {"q": "an", "a": "jakiś"},
 
@@ -425,7 +425,7 @@
   {"q": "all", "a": "wszystko"},
   {"q": "some", "a": "niektóre"},
   {"q": "any", "a": "jakiekolwiek"},
-  {"q": "no", "a": "żaden"},
+  {"q": "no", "a": "nie"},
   {"q": "each", "a": "każdy"},
   {"q": "every", "a": "każdy"},
   {"q": "both", "a": "oba"},
