@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <div id="app">
+    
 <head>
     <title>Language Trainer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,33 +8,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
 </head>
 <body>
-
+<div id="app">
 
 <div id="menu" class="screen">
     <img src="assets/POLISH.png" alt="Polish" class="title-img">
 
-    <div class="btn-wrapper verbs">
-        <button class="btn" onclick="startSingle('verbs')">verbs</button>
+    <div class="btn-wrapper people">
+        <button class="btn" onclick="startSingle('people')">People</button>
         <div class="shadow"></div>
     </div>
 
-    <div class="btn-wrapper adjectives">
-        <button class="btn" onclick="startSingle('adjectives')">Adjectives</button>
-        <div class="shadow"></div>
-    </div>
-
-    <div class="btn-wrapper">
-        <button class="btn" onclick="startSingle('subjects')">subjects</button>
+    <div class="btn-wrapper actions">
+        <button class="btn" onclick="startSingle('actions')">Actions</button>
         <div class="shadow"></div>
     </div>
 
     <div class="btn-wrapper">
-        <button class="btn" onclick="startSingle('sentences')">sentences</button>
+        <button class="btn" onclick="startSingle('things')">Things</button>
         <div class="shadow"></div>
     </div>
 
     <div class="btn-wrapper">
-        <button class="btn" onclick="startSingle('connectors')">connectors</button>
+        <button class="btn" onclick="startSingle('qualities')">Qualities</button>
+        <div class="shadow"></div>
+    </div>
+
+    <div class="btn-wrapper">
+        <button class="btn" onclick="startSingle('links')">Links</button>
         <div class="shadow"></div>
     </div>
 </div>
@@ -64,6 +64,7 @@
         </div>
     </div>
 </div>
+
 <div class="box-container"id="box">
     <img src="assets/boxboxbox.png" class="box-container">
 
@@ -92,16 +93,18 @@
     <h2 id="question" class="question-text"></h2>
     <input id="answer" class="answer-input" autofocus>
     <p id="result" class="result-text"></p>
-     <div id="progressBar">
-  <div id="progress"></div>
-<div class="progress-flowers"></div>
+    
+ <div id ="progressBar">
+  <div id ="progress"></div>
+<div id="progress-flowers"></div>
 
     <img src="assets/bison.png" id="bison">
 </div>
 </div>
 </div>
-</div>
 
+</div>
+</div>
    
 
 
@@ -424,5 +427,5 @@ document.querySelectorAll(".flower").forEach(flower => {
 });
 </script>
 
-</body></div>
+</body>
 </html>
