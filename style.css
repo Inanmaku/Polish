@@ -4,7 +4,7 @@ html, body {
     min-height: 100vh;
      height: 100%;
     overflow-x: hidden;
-    overflow-y: auto;
+
     touch-action: manipulation;
     
 overscroll-behavior: none;
@@ -25,16 +25,21 @@ overscroll-behavior: none;
 }
 @media (max-width: 600px) {
      #app {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: auto ! important;
+        display: block;
+      
     }
-      #quiz .quiz-title {
-        position: absolute;
-    left: 7px !important;
-        height: auto;
-        width: 220px;
+    #quiz {
+        overflow-y: auto !important;
+        height: 100dvh;
+    }
+ #quiz .quiz-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+}
+    
+
     }
    .back-btn-wrapper,
     .shuffle-btn-wrapper
@@ -58,13 +63,12 @@ overscroll-behavior: none;
      .again-btn-wrapper {
         display: none;
     }
-   .back-btn-wrapper {
-    position: absolute;
-    left: -170px !important;
+.back-btn-wrapper {
+    left: 15px !important;
 }
-     .shuffle-btn-wrapper {
-    position: absolute;
-    right: -130px !important;
+
+.shuffle-btn-wrapper {
+    right: 15px !important;
 }
     #progressBar {
         bottom: auto;
@@ -119,10 +123,7 @@ overscroll-behavior: none;
     left: 60px;          /* 👈 small safe offset */
     transform: none;    /* was -17px, too aggressive */
 }
-    #quiz,
-.box-container {
-    overflow: visible;
-}
+
 }
 .title-img {
     width: 330px;
