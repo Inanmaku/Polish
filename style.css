@@ -3,7 +3,7 @@ html, body {
     margin: 0;
     min-height: 100vh;
      height: 100%;
-   
+ 
     overflow-x: hidden;
 
     touch-action: manipulation;
@@ -11,17 +11,14 @@ html, body {
 overscroll-behavior: none;
  
 
-    background: linear-gradient(
-        to bottom,
-        #fffdf7 50%,
-        #e15446 50%
-    );
+   
 }
 
 #app {
     width: 100%;
-    min-height: 100dvh;
-    align-items: center;
+    height: 100dvh;
+    
+
 }
     
 .back-btn-wrapper {
@@ -123,8 +120,8 @@ overscroll-behavior: none;
     body {
           background: linear-gradient(
             to bottom,
-            #fffdf7 45%,  /* 👈 was 50%, now higher */
-            #e15446 45%        );
+            #fffdf7 50%,  /* 👈 was 50%, now higher */
+            #e15446 50%        );
         transform-origin: top center;
         overflow-x: hidden;
     }
@@ -151,13 +148,15 @@ overscroll-behavior: none;
     justify-content: center;
     align-items: center;
     height: 100dvh;
+    padding-top: 110px;
+    box-sizing: border-box;
 }
 #quiz {
     position: relative; /* IMPORTANT */
 }
 .btn {
-    width: 170px;
-    padding: 15px;
+    width: 160px;
+    padding: 11px;
 
     font-size: 26px;
     color: white;
@@ -221,7 +220,7 @@ overscroll-behavior: none;
     background: #f3edd9;
 }
 .shadow {
-    width: 170px;
+    width: 160px;
     height: 52px;   /* same visual size as button */
 
     border-radius: 13px;
@@ -234,11 +233,15 @@ overscroll-behavior: none;
 }
 
 .title-img {
+
     width: 330px;
-    margin-bottom: 15px;
-    object-fit: contain;
+    margin-bottom: -5px;
+ 
 }
 .btn-wrapper {
+
+ 
+  
     display: flex;
     flex-direction: column;
     align-items: center;
