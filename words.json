@@ -380,9 +380,8 @@
   {"q": "general", "a": "ogólny"}
 ],
   "links": [
-  {"q": "the", "a": ["ten", "ta", "to"]},
   {"q": "a", "a": "jakiś"},
-  {"q": "an", "a": "jakiś"},
+
 
   {"q": "and", "a": "i"},
   {"q": "or", "a": "lub"},
