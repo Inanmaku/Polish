@@ -3,8 +3,8 @@ html, body {
     margin: 0;
     min-height: 100vh;
      height: 100%;
-    overflow: hidden;
     overflow-x: hidden;
+    overflow-y: auto;
     touch-action: manipulation;
     
 overscroll-behavior: none;
@@ -19,7 +19,7 @@ overscroll-behavior: none;
 
 #app {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100dvh;
 
    
 }
@@ -28,7 +28,7 @@ overscroll-behavior: none;
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden;
+        overflow: auto ! important;
     }
       #quiz .quiz-title {
         position: absolute;
@@ -69,7 +69,7 @@ overscroll-behavior: none;
     #progressBar {
         bottom: auto;
         top: calc(48% + 170px);
-        width: 90%;
+        width: 80% !important;
     }
    
     .box-container {
@@ -135,7 +135,7 @@ overscroll-behavior: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100dvh;
 }
 #quiz {
     position: relative; /* IMPORTANT */
