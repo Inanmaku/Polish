@@ -124,7 +124,7 @@ overscroll-behavior: none;
     transform: none;    /* was -17px, too aggressive */
 }
 
-}
+
 .title-img {
     width: 330px;
 }
